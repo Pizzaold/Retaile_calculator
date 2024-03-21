@@ -1,0 +1,34 @@
+# Retail Calculator
+
+This is a simple Retail Calculator project that allows you to perform calculations related to retail sales.
+
+## Features
+
+- Calculate the total cost of items based on quantity and unit price.
+- Apply discounts to the total cost.
+- Calculate the final price after tax.
+
+## Getting Started
+
+To get started with the Retail Calculator, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/pizzaold/retail-calculator.git`
+2. Navigate to the project directory: `cd retail-calculator`
+3. Install the dependencies: `npm install`
+4. Run the application: `npm start`
+
+## Usage
+
+1. Enter the quantity and unit price of the items.
+2. Click on the "Calculate" button to get the total cost.
+3. Optionally, apply a discount percentage.
+4. Optionally, add tax to the total cost.
+5. The final price will be displayed.
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
