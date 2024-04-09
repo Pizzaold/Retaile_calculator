@@ -11,6 +11,7 @@ let product = {
   quantity: null,
   price: null,
   discount: 0.1,
+  salesTax: 0.20,
 };
 
 app.use("/product", productRouter);
