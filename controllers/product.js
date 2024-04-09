@@ -27,8 +27,9 @@ router.post("/", (req, res) => {
 
 router.get("/add", (req, res) => {
   const totalPrice = (product.quantity * product.price * (1 - product.discount)).toFixed(2);
+  const finalPrice = Math.max(totalPrice, 0); 
   res.json({
-    totalPrice,
+    totalPrice: finalPrice,
   });
 });
 
