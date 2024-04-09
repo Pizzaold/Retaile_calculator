@@ -1,47 +1,66 @@
 const { Router } = require("express");
 
-const router = Router();
+const productRouter = (product) => {
+  const router = Router();
 
-router.post("/", (req, res) => {
-  const { price, quantity, discount} = req.body;
-  if (!price || !quantity) {
-    return res.status(400).json({
-      error: "price and quantity are required",
-    });
-  }
+  router.post("/", (req, res) => {
+    const { price, quantity, discount, state, salesTax } = req.body;
+    if (!price || !quantity) {
+      return res.status(400).json({
+        error: "price and quantity are required",
+      });
+    }
 
-  const parsedDiscount = parseFloat(discount);
-  const parsedPrice = parseFloat(price);
-  const parsedQuantity = parseFloat(quantity);
+    const parsedDiscount = parseFloat(discount);
+    const parsedPrice = parseFloat(price);
+    const parsedQuantity = parseFloat(quantity);
 
-  const actualDiscount = isNaN(parsedDiscount) ? 0.1 : parsedDiscount;
-  const actualPrice = isNaN(parsedPrice) ? 1 : parsedPrice;
-  const actualQuantity = isNaN(parsedQuantity) ? 1 : parsedQuantity;
+    const actualDiscount = isNaN(parsedDiscount) ? 0.1 : parsedDiscount;
+    const actualPrice = isNaN(parsedPrice) ? 1 : parsedPrice;
+    const actualQuantity = isNaN(parsedQuantity) ? 1 : parsedQuantity;
 
-  const salesTax = req.body.salesTax || 0.20;
+    const newState = state;
 
-  product = {
-    quantity: actualQuantity,
-    price: actualPrice,
-    discount: actualDiscount,
-    salesTax: salesTax,
-  };
-  res.json(product);
-});
+    const newSalesTax = parseFloat(salesTax) || 0.15;
 
-router.get("/add", (req, res) => {
-  const totalPriceBeforeTax = product.quantity * product.price * (1 - product.discount);
-  const SalesTax = totalPriceBeforeTax * product.salesTax;
-  const totalPriceWithTax = totalPriceBeforeTax + SalesTax;
+    if (newState !== "EE" && newState !== "UK" && newState !== undefined) {
+      return res.status(400).json({
+        error: "Invalid state",
+      });
+    }
 
-  res.json({
-    totalPriceWithTax,
-    totalPriceBeforeTax,
+    product.quantity = actualQuantity;
+    product.price = actualPrice;
+    product.discount = actualDiscount;
+    product.salesTax = newSalesTax;
+    product.state = newState;
+
+    if (newState === "UK") {
+      product.salesTax = 0.3;
+    } else if (newState === "EE") {
+      product.salesTax = 0.2;
+    };
+
+    res.json(product);
   });
-});
 
-router.get("/", (req, res) => {
-  res.json(product);
-});
+  router.get("/add", (req, res) => {
+    const totalPriceBeforeTax =
+      product.quantity * product.price * (1 - product.discount);
+    const SalesTax = totalPriceBeforeTax * product.salesTax;
+    const totalPriceWithTax = totalPriceBeforeTax + SalesTax;
 
-module.exports = router;
+    res.json({
+      totalPriceWithTax,
+      totalPriceBeforeTax,
+    });
+  });
+
+  router.get("/", (req, res) => {
+    res.json(product);
+  });
+
+  return router;
+};
+
+module.exports = productRouter;

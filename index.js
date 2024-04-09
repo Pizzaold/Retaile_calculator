@@ -11,10 +11,11 @@ let product = {
   quantity: null,
   price: null,
   discount: 0.1,
-  salesTax: 0.20,
+  salesTax: null,
+  state: null,
 };
 
-app.use("/product", productRouter);
+app.use("/product", productRouter(product));
 
 app.get("/", (req, res) => {
   res.redirect("/product");
