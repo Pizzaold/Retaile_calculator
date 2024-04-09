@@ -2,6 +2,8 @@ const { Router } = require("express");
 
 const router = Router();
 
+const StateTax = 0.20;
+
 router.post("/", (req, res) => {
   const { price, quantity, discount } = req.body;
   if (!price || !quantity) {
@@ -9,6 +11,7 @@ router.post("/", (req, res) => {
       error: "price and quantity are required",
     });
   }
+
   const parsedDiscount = parseFloat(discount);
   const parsedPrice = parseFloat(price);
   const parsedQuantity = parseFloat(quantity);
@@ -26,9 +29,13 @@ router.post("/", (req, res) => {
 });
 
 router.get("/add", (req, res) => {
-  const totalPrice = (product.quantity * product.price * (1 - product.discount)).toFixed(2);
+  const totalPriceBeforeTax = product.quantity * product.price * (1 - product.discount);
+  const stateTax = totalPriceBeforeTax * StateTax;
+  const totalPriceWithTax = totalPriceBeforeTax + stateTax;
+
   res.json({
-    totalPrice,
+    totalPriceWithTax,
+    totalPriceBeforeTax,
   });
 });
 
